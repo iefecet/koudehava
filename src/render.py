@@ -114,6 +114,7 @@ def build_html(campuses: list[CampusWeather], day: dt.date, config: dict) -> lis
     env = _env(mode)
     account = config.get("account", {})
     moment = dt.datetime.now(ZoneInfo(config.get("timezone", "Europe/Istanbul")))
+    show_chart = bool(config.get("post", {}).get("show_chart", True))
     carousel_cfg = config.get("carousel", {})
     max_slides = int(carousel_cfg.get("max_slides", 10))
     include_summary = bool(carousel_cfg.get("include_summary_slide", True))
@@ -153,7 +154,7 @@ def build_html(campuses: list[CampusWeather], day: dt.date, config: dict) -> lis
                 footer_note=f"{position} / {total} · Veri: Open-Meteo",
                 c=campus,
                 icon_svg=icon_svg(campus.icon, 168, mode),
-                day_chart=chart.build(campus, moment),
+                day_chart=chart.build(campus, moment) if show_chart else "",
             ),
         )
 

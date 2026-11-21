@@ -7,7 +7,7 @@ import datetime as dt
 from render import TR_DAYS, TR_MONTHS
 from weather import CampusWeather
 
-HASHTAGS = (
+DEFAULT_HASHTAGS = (
     "#kocaeliüniversitesi #koü #umuttepe #kocaeli #izmit "
     "#havadurumu #kampüs #öğrenci"
 )
@@ -24,8 +24,18 @@ def _num(value: float | None) -> str:
 
 
 def build(campuses: list[CampusWeather], day: dt.date,
-          max_lines: int = 10) -> str:
-    """Ozet + uyari + hashtag iceren caption."""
+          config: dict | None = None, max_lines: int | None = None) -> str:
+    """Ozet + uyari + hashtag iceren caption.
+
+    Metinle ilgili ayarlar config["post"] altindan okunur; arayuzden
+    degistirilebilsin diye koda gomulu degil.
+    """
+    post = (config or {}).get("post", {})
+    hashtags = post.get("hashtags", DEFAULT_HASHTAGS)
+    rain_pct = post.get("rain_warning_percent", 50)
+    wind_kmh = post.get("wind_warning_kmh", 40)
+    if max_lines is None:
+        max_lines = post.get("caption_detail_lines", 10)
     if not campuses:
         return f"{_tr_date(day)} · veri alinamadi."
 
@@ -43,7 +53,7 @@ def build(campuses: list[CampusWeather], day: dt.date,
         )
 
     rainy = [c for c in campuses
-             if (c.precip_prob or 0) >= 50 or c.icon in WET_ICONS]
+             if (c.precip_prob or 0) >= rain_pct or c.icon in WET_ICONS]
     if rainy:
         names = ", ".join(c.name for c in rainy[:6])
         extra = f" (+{len(rainy) - 6})" if len(rainy) > 6 else ""
@@ -51,7 +61,7 @@ def build(campuses: list[CampusWeather], day: dt.date,
     else:
         lines.append("☔ Bugün yağış beklenmiyor.")
 
-    windy = [c for c in campuses if (c.wind_max or 0) >= 40]
+    windy = [c for c in campuses if (c.wind_max or 0) >= wind_kmh]
     if windy:
         lines.append(
             "💨 Rüzgârlı: "
@@ -71,7 +81,7 @@ def build(campuses: list[CampusWeather], day: dt.date,
     lines.append("")
     lines.append("Veri: Open-Meteo · otomatik paylaşım")
     lines.append("")
-    lines.append(HASHTAGS)
+    lines.append(hashtags)
 
     caption = "\n".join(lines)
     # Instagram caption siniri 2200 karakter

@@ -242,6 +242,40 @@ Bundan sonra her gün 06:30'da (TR) otomatik paylaşılır.
 
 ---
 
+## Ayar arayüzü
+
+Gönderiyle ilgili her ayarı tek yerden yönetmek için masaüstü arayüzü:
+
+```powershell
+python scripts/ayarlar.py
+```
+
+Ek bağımlılık yok — tkinter Python ile birlikte geliyor.
+
+| Sekme | Neler var |
+|---|---|
+| **Gönderi** | Paylaşım saati, tema, slayt sınırı, özet slaytı, gün içi grafiği, açıklama ayarları, hashtag'ler |
+| **Yerleşkeler** | Ekle / sil / düzenle, sıralama (slayt sırasını belirler), hangi yerleşkenin kendi slaytı olacağı |
+| **Hesap** | Marka adı, alt başlık, üniversite, kullanıcı adı |
+| **Instagram** | Hesap ID, erişim token'ı (gizli), Graph sunucusu ve sürümü, görsel kök URL'i |
+
+Alt çubuktaki düğmeler:
+
+- **Önizleme üret** — kaydeder ve `--dry-run` çalıştırır, görseller `output/` altına çıkar
+- **Kurulum kontrolü** — `preflight.py`'yi çalıştırır
+- **Kaydet** — `config/campuses.json`, `.env` ve workflow zamanlamasını yazar
+- **Kaydet ve GitHub'a gönder** — kaydeder, commit atar ve push eder (onay sorar)
+
+Paylaşım saatini Türkiye saatiyle girersin; arayüz bunu workflow'un cron
+ifadesine çevirir (TR yıl boyunca UTC+3). Slayt sayacı, seçtiğin yerleşke
+sayısı Instagram'ın 10 slayt sınırını aşarsa uyarır.
+
+> `.env` gitignore'da olduğu için token GitHub'a gönderilmez. Token'ı
+> arayüzden değiştirirsen repo Secrets'taki `IG_ACCESS_TOKEN` değerini de
+> elle güncellemen gerekir — Actions oradan okuyor.
+
+---
+
 ## Komutlar
 
 | Komut | Ne yapar |
@@ -253,6 +287,7 @@ Bundan sonra her gün 06:30'da (TR) otomatik paylaşılır.
 | `python scripts/setup_instagram.py EAAG...` | IG_USER_ID'yi bulup `.env`'e yazar |
 | `python scripts/preflight.py` | Kurulumu baştan sona doğrular |
 | `python scripts/check_token.py` | Token süresini gösterir |
+| `python scripts/ayarlar.py` | **Ayar arayüzünü açar** |
 | `python scripts/make_logo.py` | Logo PNG'lerini üretir |
 
 ---
@@ -270,7 +305,8 @@ Bundan sonra her gün 06:30'da (TR) otomatik paylaşılır.
 | Hava durumu ikonları | `src/icons.py` |
 | Marka adı, alt başlık, kullanıcı adı | `config/campuses.json` → `account` |
 | KOÜ'de Hava amblemi | `assets/logo-koudehava.svg` |
-| Gönderi metni ve hashtag'ler | `src/caption.py` |
+| Hashtag'ler, uyarı eşikleri, paylaşım saati | `config/campuses.json` → `post` (ya da arayüz) |
+| Gönderi metninin yapısı | `src/caption.py` |
 | Paylaşım saati | `.github/workflows/daily.yml` → `cron` |
 
 Koordinatlar ilçe/mahalle merkezi seviyesindedir; Open-Meteo'nun grid çözünürlüğü

@@ -12,6 +12,14 @@
     "max_slides": 10,
     "include_summary_slide": true
   },
+  "post": {
+    "time": "06:30",
+    "hashtags": "#kocaeliüniversitesi #koü #umuttepe #kocaeli #izmit #havadurumu #kampüs #öğrenci",
+    "show_chart": true,
+    "caption_detail_lines": 10,
+    "rain_warning_percent": 50,
+    "wind_warning_kmh": 40
+  },
   "campuses": [
     {
       "id": "umuttepe",
