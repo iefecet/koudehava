@@ -10,6 +10,7 @@ from zoneinfo import ZoneInfo
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from playwright.sync_api import sync_playwright
 
+import chart
 import theme
 from icons import svg as icon_svg
 from weather import CampusWeather
@@ -131,36 +132,56 @@ def build_html(campuses: list[CampusWeather], day: dt.date, config: dict) -> lis
 
     pages: list[tuple[str, str]] = []
 
+    # Slayt sirasi: once ana yerleske (Umuttepe), sonra ozet tablosu,
+    # ardindan diger yerleskeler.
+    carousel = [c for c in campuses if c.carousel]
+    lead = carousel[0] if carousel else None
+    rest = carousel[1:]
+
+    slots = max_slides - (1 if include_summary else 0)
+    chosen = ([lead] if lead else []) + rest
+    chosen = chosen[:slots]
+
+    campus_tpl = env.get_template("campus.html")
+
+    def campus_page(campus, position: int, total: int) -> tuple[str, str]:
+        return (
+            f"{position:02d}-{campus.id}.png",
+            campus_tpl.render(
+                **base_ctx,
+                p=theme.get(campus.icon, mode),
+                footer_note=f"{position} / {total} · Veri: Open-Meteo",
+                c=campus,
+                icon_svg=icon_svg(campus.icon, 168, mode),
+                day_chart=chart.build(campus, moment),
+            ),
+        )
+
+    total = len(chosen) + (1 if include_summary else 0)
+    position = 1
+
+    if lead:
+        pages.append(campus_page(lead, position, total))
+        position += 1
+
     if include_summary:
         with_max = [c for c in campuses if c.temp_max is not None]
-        tpl = env.get_template("summary.html")
         pages.append((
-            "00-ozet.png",
-            tpl.render(
+            f"{position:02d}-ozet.png",
+            env.get_template("summary.html").render(
                 **base_ctx,
                 p=theme.summary(mode),
-                footer_note="Veri: Open-Meteo",
+                footer_note=f"{position} / {total} · Veri: Open-Meteo",
                 campuses=campuses,
                 warmest=max(with_max, key=lambda c: c.temp_max) if with_max else None,
                 coldest=min(with_max, key=lambda c: c.temp_max) if with_max else None,
             ),
         ))
+        position += 1
 
-    slots = max_slides - len(pages)
-    selected = [c for c in campuses if c.carousel][:slots]
-
-    tpl = env.get_template("campus.html")
-    for index, campus in enumerate(selected, start=1):
-        pages.append((
-            f"{index:02d}-{campus.id}.png",
-            tpl.render(
-                **base_ctx,
-                p=theme.get(campus.icon, mode),
-                footer_note=f"{index} / {len(selected)} · Veri: Open-Meteo",
-                c=campus,
-                icon_svg=icon_svg(campus.icon, 168, mode),
-            ),
-        ))
+    for campus in chosen[1:] if lead else chosen:
+        pages.append(campus_page(campus, position, total))
+        position += 1
 
     return pages
 

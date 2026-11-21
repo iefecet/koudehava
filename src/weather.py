@@ -22,6 +22,11 @@ DAILY_FIELDS = [
     "sunset",
 ]
 
+HOURLY_FIELDS = [
+    "temperature_2m",
+    "precipitation_probability",
+]
+
 CURRENT_FIELDS = [
     "temperature_2m",
     "apparent_temperature",
@@ -89,6 +94,10 @@ class CampusWeather:
     code: int | None = None
     description: str = ""
     icon: str = "overcast"
+    # Gun ici seyir (00:00-23:00, yerel saat)
+    hourly_time: list[str] = field(default_factory=list)
+    hourly_temp: list[float | None] = field(default_factory=list)
+    hourly_precip: list[float | None] = field(default_factory=list)
     extras: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -159,6 +168,7 @@ def fetch(campuses: list[dict], timezone: str = "Europe/Istanbul",
         "latitude": ",".join(str(c["lat"]) for c in campuses),
         "longitude": ",".join(str(c["lon"]) for c in campuses),
         "daily": ",".join(DAILY_FIELDS),
+        "hourly": ",".join(HOURLY_FIELDS),
         "current": ",".join(CURRENT_FIELDS),
         "timezone": timezone,
         "forecast_days": 1,
@@ -179,6 +189,7 @@ def fetch(campuses: list[dict], timezone: str = "Europe/Istanbul",
     for campus, block in zip(campuses, blocks):
         daily = block.get("daily", {}) or {}
         current = block.get("current", {}) or {}
+        hourly = block.get("hourly", {}) or {}
         code = _first(daily.get("weather_code"))
         description, icon = describe(code)
 
@@ -202,6 +213,9 @@ def fetch(campuses: list[dict], timezone: str = "Europe/Istanbul",
                 code=int(code) if code is not None else None,
                 description=description,
                 icon=icon,
+                hourly_time=hourly.get("time") or [],
+                hourly_temp=hourly.get("temperature_2m") or [],
+                hourly_precip=hourly.get("precipitation_probability") or [],
             )
         )
     return results

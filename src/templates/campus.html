@@ -2,7 +2,7 @@
 
 {% block style %}
   .hero {
-    margin-top: 104px;
+    margin-top: 72px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -29,9 +29,9 @@
 
   .hero-name {
     margin-top: 16px;
-    font-size: 94px;
+    font-size: 88px;
     font-weight: 800;
-    letter-spacing: -3.6px;
+    letter-spacing: -3.2px;
     line-height: 0.98;
   }
 
@@ -50,16 +50,16 @@
 
   /* ---------- sicaklik ---------- */
   .temp-block {
-    margin-top: 76px;
+    margin-top: 52px;
     display: flex;
     align-items: flex-end;
     gap: 34px;
   }
 
   .temp-now {
-    font-size: 252px;
+    font-size: 214px;
     font-weight: 800;
-    letter-spacing: -16px;
+    letter-spacing: -13px;
     line-height: 0.80;
   }
   .temp-now .deg {
@@ -100,7 +100,7 @@
   .minmax .mm.low .v { color: var(--ink-2); }
 
   .condition {
-    margin-top: 46px;
+    margin-top: 32px;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -119,8 +119,8 @@
 
   /* ---------- istatistik seridi ---------- */
   .stats {
-    margin-top: 102px;
-    padding-top: 42px;
+    margin-top: 58px;
+    padding-top: 32px;
     border-top: 1px solid var(--hair);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -141,8 +141,8 @@
     min-height: 38px;
   }
   .stat .v {
-    margin-top: 12px;
-    font-size: 52px;
+    margin-top: 10px;
+    font-size: 46px;
     font-weight: 800;
     letter-spacing: -1.8px;
   }
@@ -156,36 +156,55 @@
 
   /* ---------- gun dogumu / batimi ---------- */
   .sun {
-    margin-top: 68px;
+    margin-top: 34px;
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 24px 30px;
-    border-radius: 20px;
-    background: var(--surface);
-    border: 1px solid var(--hair-soft);
-  }
-  .sun .item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 21px;
+    font-size: 19px;
     font-weight: 600;
+    color: var(--ink-2);
   }
-  .sun .item .lbl { color: var(--ink-2); font-weight: 500; }
+  .sun .lbl { font-weight: 500; color: var(--ink-3); }
   .sun .sep {
     flex: 1 1 auto;
     height: 1px;
-    background: linear-gradient(90deg,
-      transparent, var(--hair), transparent);
+    background: linear-gradient(90deg, transparent, var(--hair), transparent);
   }
   .sun .dot {
     width: 9px; height: 9px;
     border-radius: 50%;
     background: var(--accent);
-    opacity: 0.9;
   }
-  .sun .dot.down { opacity: 0.4; }
+  .sun .dot.down { opacity: 0.42; }
+
+  /* ---------- gun ici grafik ---------- */
+  .chart {
+    margin-top: 16px;
+    color: var(--ink);
+  }
+  .chart .daychart { display: block; overflow: visible; }
+  .ct-label {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    fill: var(--ink-3);
+  }
+  .ct-point {
+    font-size: 19px;
+    font-weight: 700;
+    fill: var(--ink);
+    /* etiket cizginin ya da serit basliginin uzerine denk gelirse okunsun */
+    paint-order: stroke;
+    stroke: {{ "#FFFFFF" if p.is_light else "#0B1B2B" }};
+    stroke-width: 5px;
+    stroke-linejoin: round;
+  }
+  .ct-axis {
+    font-size: 16px;
+    font-weight: 600;
+    fill: var(--ink-3);
+  }
+
 {% endblock %}
 
 {% block body %}
@@ -234,16 +253,16 @@
   </div>
 
   <div class="sun">
-    <div class="item">
-      <span class="dot"></span>
-      <span class="lbl">Gün doğumu</span>
-      <span>{{ c.sunrise_hm }}</span>
-    </div>
-    <div class="sep"></div>
-    <div class="item">
-      <span class="lbl">Gün batımı</span>
-      <span>{{ c.sunset_hm }}</span>
-      <span class="dot down"></span>
-    </div>
+    <span class="dot"></span>
+    <span class="lbl">Gün doğumu</span>
+    <span>{{ c.sunrise_hm }}</span>
+    <span class="sep"></span>
+    <span class="lbl">Gün batımı</span>
+    <span>{{ c.sunset_hm }}</span>
+    <span class="dot down"></span>
   </div>
+
+  {% if day_chart %}
+  <div class="chart">{{ day_chart|safe }}</div>
+  {% endif %}
 {% endblock %}
