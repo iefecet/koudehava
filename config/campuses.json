@@ -18,7 +18,8 @@
     "show_chart": true,
     "caption_detail_lines": 10,
     "rain_warning_percent": 50,
-    "wind_warning_kmh": 40
+    "wind_warning_kmh": 40,
+    "caption_template": "🗓 {tarih} — {marka}\n\n🔆 En ılık: {en_ilik}\n❄️ En serin: {en_serin}\n{yagis_uyarisi}\n{ruzgar_uyarisi}\n\nYerleşke yerleşke detaylar için kaydır 👉\n\n{detaylar}\n\nVeri: Open-Meteo · otomatik paylaşım\n\n{hashtagler}"
   },
   "campuses": [
     {

@@ -74,6 +74,7 @@ class App(tk.Tk):
         notebook.pack(fill="both", expand=True, padx=12, pady=(12, 6))
 
         self._tab_post(notebook)
+        self._tab_caption(notebook)
         self._tab_campuses(notebook)
         self._tab_account(notebook)
         self._tab_instagram(notebook)
@@ -176,6 +177,52 @@ class App(tk.Tk):
         ttk.Label(box3, text="Hashtag'ler").pack(anchor="w", padx=10)
         self.txt_tags = tk.Text(box3, height=4, wrap="word")
         self.txt_tags.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+
+    def _tab_caption(self, nb: ttk.Notebook) -> None:
+        tab = ttk.Frame(nb)
+        nb.add(tab, text="  Açıklama  ")
+
+        ttk.Label(
+            tab,
+            text="Instagram gönderisinin açıklama metni. Süslü parantez içindeki "
+                 "değişkenler paylaşım anında gerçek verilerle doldurulur.",
+            foreground="#666", justify="left", wraplength=900,
+        ).pack(anchor="w", padx=10, pady=(10, 4))
+
+        self.txt_caption = tk.Text(tab, height=16, wrap="word",
+                                   font=("Consolas", 10), undo=True)
+        self.txt_caption.pack(fill="both", expand=True, padx=10, pady=6)
+
+        box = ttk.LabelFrame(tab, text="Kullanılabilir değişkenler "
+                                       "(çift tıkla ekle)")
+        box.pack(fill="x", padx=10, pady=(0, 10))
+        grid = ttk.Frame(box)
+        grid.pack(fill="x", padx=6, pady=6)
+
+        import caption as cap_mod
+        for i, (key, hint) in enumerate(cap_mod.PLACEHOLDERS):
+            row, col = divmod(i, 3)
+            item = ttk.Label(grid, text=f"{{{key}}}  —  {hint}",
+                             foreground="#334", cursor="hand2")
+            item.grid(row=row, column=col, sticky="w", padx=8, pady=2)
+            item.bind("<Double-1>",
+                      lambda _e, k=key: self.txt_caption.insert(
+                          "insert", "{" + k + "}"))
+
+        bar = ttk.Frame(tab)
+        bar.pack(fill="x", padx=10, pady=(0, 10))
+        ttk.Button(bar, text="Varsayılan metne dön",
+                   command=self._reset_caption).pack(side="left")
+        ttk.Label(bar, text="Instagram sınırı 2200 karakter; aşarsa "
+                            "otomatik kısaltılır.",
+                  foreground="#666").pack(side="left", padx=12)
+
+    def _reset_caption(self) -> None:
+        import caption as cap_mod
+        if messagebox.askyesno("Varsayılan metin",
+                               "Açıklama metni varsayılana dönsün mü?"):
+            self.txt_caption.delete("1.0", "end")
+            self.txt_caption.insert("1.0", cap_mod.DEFAULT_TEMPLATE)
 
     def _tab_campuses(self, nb: ttk.Notebook) -> None:
         tab = ttk.Frame(nb)
@@ -291,6 +338,10 @@ class App(tk.Tk):
         self.var_wind.set(int(post.get("wind_warning_kmh", 40)))
         self.txt_tags.delete("1.0", "end")
         self.txt_tags.insert("1.0", post.get("hashtags", ""))
+        import caption as cap_mod
+        self.txt_caption.delete("1.0", "end")
+        self.txt_caption.insert("1.0", post.get("caption_template")
+                                or cap_mod.DEFAULT_TEMPLATE)
 
         self.var_brand.set(account.get("brand", ""))
         self.var_tagline.set(account.get("tagline", ""))
@@ -458,6 +509,7 @@ class App(tk.Tk):
         cfg["post"] = {
             "time": self.var_time.get(),
             "hashtags": self.txt_tags.get("1.0", "end").strip(),
+            "caption_template": self.txt_caption.get("1.0", "end").strip(),
             "show_chart": bool(self.var_chart.get()),
             "caption_detail_lines": int(self.var_lines.get()),
             "rain_warning_percent": int(self.var_rain.get()),
