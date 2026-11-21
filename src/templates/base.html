@@ -170,6 +170,35 @@
     letter-spacing: 1.9px;
     margin-top: 4px;
   }
+  .datechip .d3 {
+    margin-top: 9px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--accent);
+  }
+  .datechip .d3 .clock {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    position: relative;
+    flex: 0 0 auto;
+  }
+  .datechip .d3 .clock::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 1.5px;
+    width: 2px;
+    height: 4px;
+    background: currentColor;
+    transform: translateX(-50%);
+    border-radius: 1px;
+  }
 
   /* ---------- alt bar ---------- */
   .footer {
@@ -220,6 +249,7 @@
       <div class="datechip">
         <div class="d1">{{ date_long }}</div>
         <div class="d2">{{ weekday }}</div>
+        {% if time_hm %}<div class="d3"><span class="clock"></span>{{ time_hm }}</div>{% endif %}
       </div>
     </div>
 

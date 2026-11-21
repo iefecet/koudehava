@@ -1,6 +1,6 @@
 # KOÜ Yerleşke Hava Durumu → Instagram
 
-Kocaeli Üniversitesi'nin 18 yerleşkesinin hava durumunu her sabah otomatik olarak
+Kocaeli Üniversitesi'nin 15 yerleşkesinin hava durumunu her sabah otomatik olarak
 Instagram'da **carousel** gönderi olarak paylaşan otomasyon.
 
 - **Veri:** [Open-Meteo](https://open-meteo.com) (ücretsiz, API anahtarı gerektirmez)
@@ -14,7 +14,7 @@ Instagram'da **carousel** gönderi olarak paylaşan otomasyon.
 ## Nasıl çalışıyor
 
 ```
-Open-Meteo (tek istek, 18 konum)
+Open-Meteo (tek istek, 15 konum)
         ↓
 HTML şablon → Playwright → 10 adet PNG
    • 00-ozet.png        tüm yerleşkelerin özeti
@@ -29,7 +29,7 @@ Instagram görselleri **kendi sunucularından çeker**, bu yüzden dosyaların p
 URL'de olması zorunludur. Ekstra bir servise (Cloudinary vb.) üye olmamak için
 görseller repoya yazılıp `raw.githubusercontent.com` üzerinden sunuluyor.
 
-> **Not:** Instagram carousel en fazla **10 slayt** kabul eder. 18 yerleşkenin
+> **Not:** Instagram carousel en fazla **10 slayt** kabul eder. 15 yerleşkenin
 > hepsi 1. slayttaki özet tablosunda yer alır; hangi 9 yerleşkenin kendi
 > slaytını alacağı `config/campuses.json` içindeki `"carousel": true` ile belirlenir.
 
@@ -286,3 +286,6 @@ Maps'te sağ tık → koordinatı kopyala ile `lat`/`lon` değerlerini güncelle
 - `output/` klasörü her gün büyür. İstersen workflow'a eski klasörleri silen bir
   adım ekleyebilirsin; görseller ayrıca 14 gün artifact olarak da saklanıyor.
 - Instagram API sürümü `GRAPH_VERSION` ile değiştirilebilir (varsayılan `v26.0`).
+
+> Yerleşke listesi ve koordinatlar üniversitenin resmî sayfasından alındı:
+> <https://tanitim.kocaeli.edu.tr/sayfalar/yerleskeler-5fe>

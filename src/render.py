@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 import datetime as dt
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from playwright.sync_api import sync_playwright
@@ -97,10 +98,12 @@ def _env(mode: str = "dark") -> Environment:
     return env
 
 
-def _date_context(day: dt.date) -> dict:
+def _date_context(day: dt.date, moment: dt.datetime | None = None) -> dict:
     return {
         "date_long": f"{day.day} {TR_MONTHS[day.month - 1]}",
         "weekday": TR_DAYS[day.weekday()],
+        # Gorselin uretildigi, yani paylasimin yapildigi saat
+        "time_hm": moment.strftime("%H:%M") if moment else "",
     }
 
 
@@ -109,6 +112,7 @@ def build_html(campuses: list[CampusWeather], day: dt.date, config: dict) -> lis
     mode = config.get("theme", "light")
     env = _env(mode)
     account = config.get("account", {})
+    moment = dt.datetime.now(ZoneInfo(config.get("timezone", "Europe/Istanbul")))
     carousel_cfg = config.get("carousel", {})
     max_slides = int(carousel_cfg.get("max_slides", 10))
     include_summary = bool(carousel_cfg.get("include_summary_slide", True))
@@ -122,7 +126,7 @@ def build_html(campuses: list[CampusWeather], day: dt.date, config: dict) -> lis
         "handle": account.get("handle", ""),
         "kou_logo": find_kou_logo(),
         "brand_logo": brand_logo_markup(),
-        **_date_context(day),
+        **_date_context(day, moment),
     }
 
     pages: list[tuple[str, str]] = []
