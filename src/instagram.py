@@ -43,6 +43,7 @@ class InstagramPublisher:
         # Token incelemek icin gereken opsiyonel uygulama kimligi
         self.app_id = os.environ.get("IG_APP_ID", "")
         self.app_secret = os.environ.get("IG_APP_SECRET", "")
+        self.retries = 3
         self.version = version or os.environ.get("GRAPH_VERSION") or DEFAULT_VERSION
         self.timeout = timeout
 
@@ -62,15 +63,41 @@ class InstagramPublisher:
     def _url(self, path: str) -> str:
         return f"{self.base}/{self.version}/{path.lstrip('/')}"
 
-    def _post(self, path: str, params: dict) -> dict:
+    def _send(self, method: str, path: str, params: dict, retry: bool) -> dict:
+        """Gecici ag hatalarinda yeniden dener.
+
+        DIKKAT: retry=True yalnizca tekrarlanmasi zararsiz cagrilar icindir.
+        media_publish tekrarlanirsa ayni gonderi iki kez paylasilabilir;
+        o yuzden orada asla kullanilmaz.
+        """
         params = {"access_token": self.access_token, **params}
-        response = requests.post(self._url(path), data=params, timeout=self.timeout)
-        return self._handle(response)
+        url = self._url(path)
+        attempts = self.retries if retry else 1
+        last: Exception | None = None
+
+        for attempt in range(1, attempts + 1):
+            try:
+                if method == "POST":
+                    response = requests.post(url, data=params, timeout=self.timeout)
+                else:
+                    response = requests.get(url, params=params, timeout=self.timeout)
+                return self._handle(response)
+            except (requests.Timeout, requests.ConnectionError) as exc:
+                last = exc
+                if attempt < attempts:
+                    wait = 4.0 * attempt
+                    print(f"      Graph API yanıt vermedi "
+                          f"({exc.__class__.__name__}); {wait:.0f} sn sonra "
+                          f"yeniden denenecek ({attempt}/{attempts - 1})")
+                    time.sleep(wait)
+
+        raise InstagramError(f"Graph API'ye ulaşılamadı: {last}") from last
+
+    def _post(self, path: str, params: dict, retry: bool = False) -> dict:
+        return self._send("POST", path, params, retry)
 
     def _get(self, path: str, params: dict) -> dict:
-        params = {"access_token": self.access_token, **params}
-        response = requests.get(self._url(path), params=params, timeout=self.timeout)
-        return self._handle(response)
+        return self._send("GET", path, params, retry=True)
 
     @staticmethod
     def _handle(response: requests.Response) -> dict:
@@ -98,6 +125,7 @@ class InstagramPublisher:
         data = self._post(
             f"{self.user_id}/media",
             {"image_url": image_url, "is_carousel_item": "true"},
+            retry=True,
         )
         container_id = data.get("id")
         if not container_id:
@@ -112,6 +140,7 @@ class InstagramPublisher:
                 "children": ",".join(children),
                 "caption": caption,
             },
+            retry=True,
         )
         container_id = data.get("id")
         if not container_id:

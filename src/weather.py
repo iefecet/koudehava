@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -115,9 +116,42 @@ def _first(value: Any) -> Any:
     return value
 
 
+class WeatherUnavailable(RuntimeError):
+    """Open-Meteo'ya tum denemelere ragmen ulasilamadi."""
+
+
+def _request_with_retry(params: dict, timeout: int, attempts: int,
+                        backoff: float):
+    """Gecici ag hatalarinda yeniden dener.
+
+    Tek bir zaman asimi gunluk gonderinin tamamini dusurmesin diye:
+    Open-Meteo zaman zaman yavaslayabiliyor.
+    """
+    last: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            response = requests.get(API_URL, params=params, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except (requests.Timeout, requests.ConnectionError,
+                requests.HTTPError, ValueError) as exc:
+            last = exc
+            if attempt < attempts:
+                wait = backoff * attempt
+                print(f"      Open-Meteo yanıt vermedi "
+                      f"({exc.__class__.__name__}); {wait:.0f} sn sonra "
+                      f"yeniden denenecek ({attempt}/{attempts - 1})")
+                time.sleep(wait)
+
+    raise WeatherUnavailable(
+        f"Open-Meteo {attempts} denemede yanıt vermedi: {last}"
+    ) from last
+
+
 def fetch(campuses: list[dict], timezone: str = "Europe/Istanbul",
-          timeout: int = 30) -> list[CampusWeather]:
-    """Butun yerleskeler icin tek HTTP istegi atar."""
+          timeout: int = 45, attempts: int = 4,
+          backoff: float = 5.0) -> list[CampusWeather]:
+    """Butun yerleskeler icin tek HTTP istegi atar (gerekirse yeniden dener)."""
     if not campuses:
         return []
 
@@ -131,9 +165,8 @@ def fetch(campuses: list[dict], timezone: str = "Europe/Istanbul",
         "wind_speed_unit": "kmh",
     }
 
-    response = requests.get(API_URL, params=params, timeout=timeout)
-    response.raise_for_status()
-    payload = response.json()
+    payload = _request_with_retry(params, timeout=timeout, attempts=attempts,
+                                  backoff=backoff)
 
     # Tek konumda dict, cok konumda liste doner.
     blocks = payload if isinstance(payload, list) else [payload]
