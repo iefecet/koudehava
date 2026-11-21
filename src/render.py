@@ -222,4 +222,12 @@ def render(campuses: list[CampusWeather], day: dt.date, config: dict,
             written.append(target)
         browser.close()
 
+    # Yerleske listesi ya da sirasi degisince eski dosya adlari klasorde
+    # kaliyor ve paylasima karisiyordu (carousel en fazla 10 gorsel alir).
+    produced = {p.name for p in written}
+    for stale in sorted(outdir.glob("*.png")):
+        if stale.name not in produced:
+            stale.unlink()
+            print(f"      (eski dosya silindi: {stale.name})")
+
     return written
