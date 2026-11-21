@@ -15,11 +15,11 @@
   "post": {
     "time": "06:30",
     "hashtags": "#kocaeliüniversitesi #koü #umuttepe #kocaeli #izmit #havadurumu #kampüs #öğrenci",
+    "caption_template": "🗓 {tarih} - {saat} - {marka}\n\n🔆 En ılık: {en_ilik}\n❄️ En serin: {en_serin}\n{yagis_uyarisi}\n{ruzgar_uyarisi}\n\nYerleşke yerleşke detaylar için kaydır 👉\n\n{detaylar}\n\nVeri: Open-Meteo\n\n{hesap}\n\n{hashtagler}",
     "show_chart": true,
     "caption_detail_lines": 10,
     "rain_warning_percent": 50,
-    "wind_warning_kmh": 40,
-    "caption_template": "🗓 {tarih} — {marka}\n\n🔆 En ılık: {en_ilik}\n❄️ En serin: {en_serin}\n{yagis_uyarisi}\n{ruzgar_uyarisi}\n\nYerleşke yerleşke detaylar için kaydır 👉\n\n{detaylar}\n\nVeri: Open-Meteo · otomatik paylaşım\n\n{hashtagler}"
+    "wind_warning_kmh": 40
   },
   "campuses": [
     {
@@ -28,6 +28,14 @@
       "subtitle": "Rektörlük · Merkez Yerleşke",
       "lat": 40.822332,
       "lon": 29.92172,
+      "carousel": true
+    },
+    {
+      "id": "korfez",
+      "name": "Körfez",
+      "subtitle": "Ali Rıza Veziroğlu MYO · Yabancı Diller",
+      "lat": 40.77647,
+      "lon": 29.73374,
       "carousel": true
     },
     {
@@ -60,7 +68,7 @@
       "subtitle": "Ali Özbay MYO",
       "lat": 40.71619,
       "lon": 29.78179,
-      "carousel": true
+      "carousel": false
     },
     {
       "id": "karamursel",
@@ -92,7 +100,7 @@
       "subtitle": "Kandıra MYO",
       "lat": 41.06475,
       "lon": 30.16675,
-      "carousel": true
+      "carousel": false
     },
     {
       "id": "kosekoy",
@@ -100,14 +108,6 @@
       "subtitle": "Kartepe Atçılık MYO",
       "lat": 40.744016,
       "lon": 30.023821,
-      "carousel": false
-    },
-    {
-      "id": "korfez",
-      "name": "Körfez",
-      "subtitle": "Ali Rıza Veziroğlu MYO · Yabancı Diller",
-      "lat": 40.77647,
-      "lon": 29.73374,
       "carousel": false
     },
     {
@@ -140,7 +140,7 @@
       "subtitle": "Diş Hekimliği Fakültesi",
       "lat": 40.708243,
       "lon": 29.975087,
-      "carousel": false
+      "carousel": true
     }
   ]
 }
