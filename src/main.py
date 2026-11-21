@@ -112,7 +112,8 @@ def main() -> int:
             print(f"      {p.name}")
 
         print("[3/4] Açıklama hazırlanıyor")
-        text = caption_mod.build(campuses, day, config)
+        text = caption_mod.build(campuses, day, config,
+                                 dt.datetime.now(ZoneInfo(timezone)))
         (outdir / "caption.txt").write_text(text, encoding="utf-8")
         print("      " + text.splitlines()[0])
 

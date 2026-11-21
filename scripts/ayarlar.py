@@ -29,8 +29,12 @@ PAD = {"padx": 10, "pady": 6}
 
 # --------------------------------------------------------------- yardimci
 
-def run_command(args: list[str], log) -> int:
-    """Komutu calistirir, ciktisini satir satir log'a yazar."""
+def run_command(args: list[str], log, collect: list[str] | None = None) -> int:
+    """Komutu calistirir, ciktisini satir satir log'a yazar.
+
+    collect verilirse ciktinin satirlari oraya da birikir; hata durumunda
+    kullaniciya gercek sebebi gosterebilmek icin.
+    """
     log("$ " + " ".join(args))
     try:
         proc = subprocess.Popen(
@@ -47,6 +51,8 @@ def run_command(args: list[str], log) -> int:
         line = line.rstrip()
         if line:
             log("  " + line)
+            if collect is not None:
+                collect.append(line)
     return proc.wait()
 
 
@@ -642,11 +648,19 @@ class App(tk.Tk):
             return
 
         def work() -> None:
-            code = run_command([sys.executable, "scripts/yayinla.py"], self.log)
+            output: list[str] = []
+            code = run_command([sys.executable, "scripts/yayinla.py"],
+                               self.log, output)
             if code == 0:
                 self.log("Gönderi yayınlandı.")
-            else:
-                self.log("Yayınlama başarısız — günlüğe bak.")
+                return
+
+            self.log("Yayınlama başarısız.")
+            # Hatanin gercek sebebi gunlugun yukarisinda kaliyor; one cikar.
+            detail = "\n".join(output[-14:]) or "Çıktı alınamadı."
+            self.after(0, lambda: messagebox.showerror(
+                "Yayınlama başarısız",
+                "Son satırlar:\n\n" + detail))
 
         self._run_async("Gönderi yayınlanıyor", work)
 
