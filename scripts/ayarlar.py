@@ -86,6 +86,13 @@ class App(tk.Tk):
         self.status = ttk.Label(bar, text="Hazır", foreground="#444")
         self.status.pack(side="left", pady=6)
 
+        self.btn_publish = ttk.Button(bar, text="● Gönderi yayınla",
+                                      command=self.publish_now)
+        self.btn_publish.pack(side="right", padx=(14, 0), pady=6)
+
+        ttk.Separator(bar, orient="vertical").pack(
+            side="right", fill="y", padx=8, pady=8)
+
         self.btn_push = ttk.Button(bar, text="Kaydet ve GitHub'a gönder",
                                    command=self.save_and_push)
         self.btn_push.pack(side="right", padx=(6, 0), pady=6)
@@ -560,7 +567,7 @@ class App(tk.Tk):
             return
         self.busy = True
         for b in (self.btn_preview, self.btn_check, self.btn_save,
-                  self.btn_push):
+                  self.btn_push, self.btn_publish):
             b.configure(state="disabled")
         self.set_status(title + "…")
 
@@ -595,6 +602,53 @@ class App(tk.Tk):
     def run_preflight(self) -> None:
         self._run_async("Kurulum kontrol ediliyor", lambda: run_command(
             [sys.executable, "scripts/preflight.py"], self.log))
+
+    def publish_now(self) -> None:
+        """Suanki ayarlarla hemen gercek bir gonderi yayinlar."""
+        if not self._save():
+            return
+
+        # Once paylasmadan on kontrol: eksik varsa kullaniciyi bosuna uyarmayalim
+        check = subprocess.run(
+            [sys.executable, "scripts/yayinla.py", "--kontrol"],
+            cwd=str(ROOT), capture_output=True, text=True,
+            encoding="utf-8", errors="replace",
+        )
+        if check.returncode != 0:
+            messagebox.showerror(
+                "Paylaşım yapılamaz",
+                (check.stderr or check.stdout).strip() or "Bilinmeyen hata")
+            self.log((check.stderr or check.stdout).strip())
+            return
+
+        in_carousel = sum(1 for c in self.campuses if c.get("carousel"))
+        slides = in_carousel + (1 if self.var_summary.get() else 0)
+        handle = self.var_handle.get() or "hesabına"
+
+        message = "\n\n".join((
+            f"{handle} hesabında {slides} slaytlık bir gönderi "
+            f"ŞİMDİ yayınlanacak.",
+            "Görseller önce GitHub'a gönderilecek, sonra Instagram'a "
+            "paylaşılacak.",
+            "Bu işlem geri alınamaz; gönderiyi sonradan yalnızca "
+            "Instagram uygulamasından silebilirsin.",
+            "Devam edilsin mi?",
+        ))
+
+        if not messagebox.askyesno(
+            "Gönderi yayınla", message, icon="warning", default="no",
+        ):
+            self.log("Yayınlama iptal edildi.")
+            return
+
+        def work() -> None:
+            code = run_command([sys.executable, "scripts/yayinla.py"], self.log)
+            if code == 0:
+                self.log("Gönderi yayınlandı.")
+            else:
+                self.log("Yayınlama başarısız — günlüğe bak.")
+
+        self._run_async("Gönderi yayınlanıyor", work)
 
     def save_and_push(self) -> None:
         if not self._save():
@@ -639,7 +693,7 @@ class App(tk.Tk):
             if item == "__DONE__":
                 self.busy = False
                 for b in (self.btn_preview, self.btn_check, self.btn_save,
-                          self.btn_push):
+                          self.btn_push, self.btn_publish):
                     b.configure(state="normal")
                 self.set_status("Hazır")
                 continue

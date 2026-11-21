@@ -265,6 +265,34 @@ Alt çubuktaki düğmeler:
 - **Kurulum kontrolü** — `preflight.py`'yi çalıştırır
 - **Kaydet** — `config/campuses.json`, `.env` ve workflow zamanlamasını yazar
 - **Kaydet ve GitHub'a gönder** — kaydeder, commit atar ve push eder (onay sorar)
+- **● Gönderi yayınla** — sabahı beklemeden, o anki ayarlarla hemen gerçek bir
+  gönderi paylaşır (onay sorar)
+
+### Hemen gönderi yayınlama
+
+Arayüzdeki **Gönderi yayınla** düğmesi (ya da `python scripts/yayinla.py`)
+şu adımları sırayla uygular:
+
+1. Görselleri ve açıklama metnini üretir
+2. Görselleri GitHub'a gönderir — Instagram görselleri public bir URL'den
+   çektiği için bu adım zorunlu
+3. URL'lerin gerçekten erişilebilir olduğunu doğrular
+4. Carousel olarak paylaşır
+
+Görsel kök URL'i `git remote`'tan otomatik türetilir, elle girmen gerekmez.
+Paylaşmadan önce ön kontrol çalışır; token, hesap ID'si veya slayt sayısı
+uygun değilse işlem başlamadan durur.
+
+```powershell
+python scripts/yayinla.py --kontrol
+```
+
+ile paylaşmadan yalnızca bu ön kontrolü çalıştırabilirsin.
+
+> **Geri alınamaz.** Yayınlanan gönderi yalnızca Instagram uygulamasından
+> elle silinebilir. Aynı gün ikinci kez yayınlarsan görseller aynı klasöre
+> yazılır ve `raw.githubusercontent.com` birkaç dakika önbellek tuttuğu için
+> eski görseller gidebilir.
 
 Paylaşım saatini Türkiye saatiyle girersin; arayüz bunu workflow'un cron
 ifadesine çevirir (TR yıl boyunca UTC+3). Slayt sayacı, seçtiğin yerleşke
@@ -288,6 +316,8 @@ sayısı Instagram'ın 10 slayt sınırını aşarsa uyarır.
 | `python scripts/preflight.py` | Kurulumu baştan sona doğrular |
 | `python scripts/check_token.py` | Token süresini gösterir |
 | `python scripts/ayarlar.py` | **Ayar arayüzünü açar** |
+| `python scripts/yayinla.py` | Hemen gönderi yayınlar |
+| `python src/main.py --caption-only` | Sadece açıklama metnini yazdırır |
 | `python scripts/make_logo.py` | Logo PNG'lerini üretir |
 
 ---

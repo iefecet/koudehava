@@ -119,3 +119,45 @@ def write_workflow_time(time_hhmm: str) -> bool:
         WORKFLOW_PATH.write_text(new_text, encoding="utf-8")
         return True
     return False
+
+
+# ------------------------------------------------------- gorsel barindirma
+
+def git_remote_slug() -> str | None:
+    """origin uzak adresinden 'kullanici/repo' cikarir."""
+    import subprocess
+    try:
+        url = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            cwd=str(ROOT), capture_output=True, text=True, timeout=20,
+        ).stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if not url:
+        return None
+    url = url.removesuffix(".git")
+    for prefix in ("https://github.com/", "git@github.com:",
+                   "ssh://git@github.com/"):
+        if url.startswith(prefix):
+            return url[len(prefix):]
+    return None
+
+
+def current_branch() -> str:
+    import subprocess
+    try:
+        name = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=str(ROOT), capture_output=True, text=True, timeout=20,
+        ).stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return "main"
+    return name or "main"
+
+
+def derive_image_base_url() -> str | None:
+    """Gorsellerin servis edilecegi raw URL kokunu uzak adresten turetir."""
+    slug = git_remote_slug()
+    if not slug:
+        return None
+    return f"https://raw.githubusercontent.com/{slug}/{current_branch()}/output"
