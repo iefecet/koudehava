@@ -211,8 +211,10 @@ class App(tk.Tk):
 
         bar = ttk.Frame(tab)
         bar.pack(fill="x", padx=10, pady=(0, 10))
+        ttk.Button(bar, text="Metni önizle",
+                   command=self.preview_caption).pack(side="left")
         ttk.Button(bar, text="Varsayılan metne dön",
-                   command=self._reset_caption).pack(side="left")
+                   command=self._reset_caption).pack(side="left", padx=8)
         ttk.Label(bar, text="Instagram sınırı 2200 karakter; aşarsa "
                             "otomatik kısaltılır.",
                   foreground="#666").pack(side="left", padx=12)
@@ -578,6 +580,16 @@ class App(tk.Tk):
         self._run_async("Önizleme üretiliyor", lambda: (
             run_command([sys.executable, "src/main.py", "--dry-run"], self.log),
             self.log("Görseller output/ klasöründe."),
+        ))
+
+    def preview_caption(self) -> None:
+        """Gorsel uretmeden yalnizca aciklama metnini hesaplar."""
+        if not self._save():
+            return
+        self._run_async("Açıklama metni hesaplanıyor", lambda: (
+            self.log("--- açıklama metni ---"),
+            run_command([sys.executable, "src/main.py", "--caption-only"],
+                        self.log),
         ))
 
     def run_preflight(self) -> None:

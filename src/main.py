@@ -56,6 +56,8 @@ def parse_args() -> argparse.Namespace:
                         help="Sadece görselleri üret, paylaşma")
     parser.add_argument("--publish-only", action="store_true",
                         help="Üretimi atla, diskteki görselleri paylaş")
+    parser.add_argument("--caption-only", action="store_true",
+                        help="Sadece açıklama metnini üret ve yazdır")
     parser.add_argument("--date", help="YYYY-MM-DD (varsayılan: bugün)")
     parser.add_argument("--config", default=str(CONFIG_PATH))
     parser.add_argument("--outdir", default=str(OUTPUT_ROOT))
@@ -78,6 +80,14 @@ def main() -> int:
         day = dt.datetime.now(ZoneInfo(timezone)).date()
 
     outdir = Path(args.outdir) / day.isoformat()
+
+    if args.caption_only:
+        # Gorsel uretmeden yalnizca metni goster (sablon onizlemesi icin hizli yol)
+        campuses = weather_mod.fetch(config["campuses"],
+                                     timezone=timezone)
+        moment = dt.datetime.now(ZoneInfo(timezone))
+        print(caption_mod.build(campuses, day, config, moment))
+        return 0
 
     if args.publish_only:
         paths = sorted(outdir.glob("*.png"))
