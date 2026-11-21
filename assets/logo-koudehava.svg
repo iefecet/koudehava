@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="KOÜ'de Hava">
+  <defs>
+    <clipPath id="dField"><circle cx="60" cy="60" r="51.5"/></clipPath>
+  </defs>
+
+  <!-- beyaz alan + dis halka -->
+  <circle cx="60" cy="60" r="51.5" fill="#FFFFFF"/>
+  <circle cx="60" cy="60" r="53.8" fill="none" stroke="#0F4733"
+          stroke-width="4.4"/>
+
+  <!-- gunes: bulutun arkasindan -->
+  <g stroke="#F7A823" stroke-width="3.4" stroke-linecap="round">
+    <line x1="78" y1="20" x2="78" y2="15"/>
+    <line x1="78" y1="20" x2="78" y2="15" transform="rotate(45 78 33)"/>
+    <line x1="78" y1="20" x2="78" y2="15" transform="rotate(90 78 33)"/>
+    <line x1="78" y1="20" x2="78" y2="15" transform="rotate(135 78 33)"/>
+  </g>
+  <circle cx="78" cy="33" r="11.5" fill="#F9B233"/>
+
+  <!-- bulut: esit kalinlikta kontur, beyaz dolgu -->
+  <g transform="translate(17 8) scale(0.58)">
+    <path d="M28 72h46a16 16 0 0 0 1.5-31.9A23 23 0 0 0 32 36.5A15 15 0 0 0 28 72z"
+          fill="#FFFFFF" stroke="#0F4733" stroke-width="7.6"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- ruzgar -->
+  <g stroke="#43806A" stroke-width="3.8" stroke-linecap="round">
+    <line x1="79" y1="47" x2="96" y2="47"/>
+    <line x1="74" y1="55" x2="89" y2="55"/>
+  </g>
+
+  <!-- ad -->
+  <text x="60" y="77" text-anchor="middle" fill="#0F4733"
+        font-family="Plus Jakarta Sans, Segoe UI, system-ui, sans-serif"
+        font-weight="800" font-size="21" letter-spacing="-0.6">KOÜ'de</text>
+  <text x="60" y="95" text-anchor="middle" fill="#1E8A5F"
+        font-family="Plus Jakarta Sans, Segoe UI, system-ui, sans-serif"
+        font-weight="800" font-size="19" letter-spacing="-0.5">Hava</text>
+
+  <!-- yerleske silueti -->
+  <g clip-path="url(#dField)">
+    <path d="M14 112 Q60 103 106 112 L106 120 L14 120 Z" fill="#0F4733"/>
+    <path d="M32 110 V104 H52 V99.5 H68 V104 H88 V110 Z" fill="#0F4733"/>
+    <g fill="#FFFFFF">
+      <rect x="38" y="105.6" width="1.9" height="3.2"/>
+      <rect x="42.5" y="105.6" width="1.9" height="3.2"/>
+      <rect x="47" y="105.6" width="1.9" height="3.2"/>
+      <rect x="56" y="101.4" width="1.9" height="7.4"/>
+      <rect x="60.5" y="101.4" width="1.9" height="7.4"/>
+      <rect x="65" y="101.4" width="1.9" height="7.4"/>
+      <rect x="74" y="105.6" width="1.9" height="3.2"/>
+      <rect x="78.5" y="105.6" width="1.9" height="3.2"/>
+    </g>
+  </g>
+</svg>

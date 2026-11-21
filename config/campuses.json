@@ -1,0 +1,161 @@
+{
+  "_not": "Koordinatlar ilce/mahalle merkezi seviyesindedir. Open-Meteo grid cozunurlugu ~1-11 km oldugu icin hava durumu icin yeterlidir; daha hassas istersen Google Maps'ten sag tik > koordinat kopyala ile degistir.",
+  "timezone": "Europe/Istanbul",
+  "theme": "light",
+  "account": {
+    "brand": "KOÜ'de Hava",
+    "tagline": "Yerleşke Hava Durumu",
+    "university": "Kocaeli Üniversitesi",
+    "handle": "@koudehava"
+  },
+  "carousel": {
+    "max_slides": 10,
+    "include_summary_slide": true
+  },
+  "campuses": [
+    {
+      "id": "umuttepe",
+      "name": "Umuttepe",
+      "subtitle": "İzmit · Merkez Yerleşke",
+      "lat": 40.8225,
+      "lon": 29.9225,
+      "carousel": true
+    },
+    {
+      "id": "anitpark",
+      "name": "Anıtpark",
+      "subtitle": "İzmit",
+      "lat": 40.766,
+      "lon": 29.941,
+      "carousel": true
+    },
+    {
+      "id": "arslanbey",
+      "name": "Arslanbey",
+      "subtitle": "Kartepe",
+      "lat": 40.735,
+      "lon": 30.075,
+      "carousel": true
+    },
+    {
+      "id": "hereke",
+      "name": "Hereke",
+      "subtitle": "Körfez · Asım Kocabıyık",
+      "lat": 40.747,
+      "lon": 29.6,
+      "carousel": true
+    },
+    {
+      "id": "kosekoy",
+      "name": "Köseköy",
+      "subtitle": "Kartepe",
+      "lat": 40.757,
+      "lon": 30.045,
+      "carousel": true
+    },
+    {
+      "id": "degirmendere",
+      "name": "Değirmendere",
+      "subtitle": "Gölcük · Ali Özbay",
+      "lat": 40.714,
+      "lon": 29.788,
+      "carousel": true
+    },
+    {
+      "id": "golcuk",
+      "name": "Gölcük",
+      "subtitle": "Gölcük",
+      "lat": 40.717,
+      "lon": 29.818,
+      "carousel": true
+    },
+    {
+      "id": "karamursel",
+      "name": "Karamürsel",
+      "subtitle": "Dereköy · Karamürsel",
+      "lat": 40.69,
+      "lon": 29.615,
+      "carousel": true
+    },
+    {
+      "id": "kandira",
+      "name": "Kandıra",
+      "subtitle": "Kandıra",
+      "lat": 41.07,
+      "lon": 30.152,
+      "carousel": true
+    },
+    {
+      "id": "derbent",
+      "name": "Derbent",
+      "subtitle": "İzmit",
+      "lat": 40.772,
+      "lon": 29.85,
+      "carousel": false
+    },
+    {
+      "id": "kullar",
+      "name": "Kullar",
+      "subtitle": "Başiskele · Şehit Ömer Halisdemir",
+      "lat": 40.712,
+      "lon": 29.95,
+      "carousel": false
+    },
+    {
+      "id": "korfez",
+      "name": "Körfez",
+      "subtitle": "Körfez",
+      "lat": 40.771,
+      "lon": 29.783,
+      "carousel": false
+    },
+    {
+      "id": "yuvacik",
+      "name": "Yuvacık",
+      "subtitle": "Başiskele",
+      "lat": 40.69,
+      "lon": 30.0,
+      "carousel": false
+    },
+    {
+      "id": "uzunciftlik",
+      "name": "Uzunçiftlik",
+      "subtitle": "Kartepe · Nuh Çimento",
+      "lat": 40.74,
+      "lon": 30.065,
+      "carousel": false
+    },
+    {
+      "id": "yahyakaptan",
+      "name": "Yahya Kaptan",
+      "subtitle": "İzmit",
+      "lat": 40.786,
+      "lon": 29.93,
+      "carousel": false
+    },
+    {
+      "id": "teknopark",
+      "name": "Teknopark",
+      "subtitle": "Başiskele · Yeniköy",
+      "lat": 40.7,
+      "lon": 29.93,
+      "carousel": false
+    },
+    {
+      "id": "ihsaniye",
+      "name": "İhsaniye",
+      "subtitle": "Gölcük · Ford Otosan",
+      "lat": 40.73,
+      "lon": 29.76,
+      "carousel": false
+    },
+    {
+      "id": "kartepe",
+      "name": "Kartepe",
+      "subtitle": "Kartepe",
+      "lat": 40.753,
+      "lon": 30.058,
+      "carousel": false
+    }
+  ]
+}

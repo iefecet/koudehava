@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="KOÜ'de Hava">
+  <defs>
+    <clipPath id="mField"><circle cx="60" cy="60" r="51.5"/></clipPath>
+  </defs>
+
+  <!-- beyaz alan + dis halka -->
+  <circle cx="60" cy="60" r="51.5" fill="#FFFFFF"/>
+  <circle cx="60" cy="60" r="53.8" fill="none" stroke="#0F4733"
+          stroke-width="4.4"/>
+
+  <!-- gunes -->
+  <g stroke="#F7A823" stroke-width="4.2" stroke-linecap="round">
+    <line x1="78" y1="26" x2="78" y2="21"/>
+    <line x1="78" y1="26" x2="78" y2="21" transform="rotate(45 78 42)"/>
+    <line x1="78" y1="26" x2="78" y2="21" transform="rotate(90 78 42)"/>
+    <line x1="78" y1="26" x2="78" y2="21" transform="rotate(135 78 42)"/>
+  </g>
+  <circle cx="78" cy="42" r="13" fill="#F9B233"/>
+
+  <!-- bulut -->
+  <g transform="translate(11 14) scale(0.70)">
+    <path d="M28 72h46a16 16 0 0 0 1.5-31.9A23 23 0 0 0 32 36.5A15 15 0 0 0 28 72z"
+          fill="#FFFFFF" stroke="#0F4733" stroke-width="7.4"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- ruzgar -->
+  <g stroke="#43806A" stroke-width="4.4" stroke-linecap="round">
+    <line x1="78" y1="70" x2="97" y2="70"/>
+    <line x1="72" y1="80" x2="89" y2="80"/>
+  </g>
+
+  <!-- yerleske silueti -->
+  <g clip-path="url(#mField)">
+    <path d="M14 112 Q60 103 106 112 L106 120 L14 120 Z" fill="#0F4733"/>
+    <path d="M32 110 V104 H52 V99.5 H68 V104 H88 V110 Z" fill="#0F4733"/>
+    <g fill="#FFFFFF">
+      <rect x="38" y="105.6" width="2.1" height="3.2"/>
+      <rect x="43" y="105.6" width="2.1" height="3.2"/>
+      <rect x="56" y="101.4" width="2.1" height="7.4"/>
+      <rect x="61" y="101.4" width="2.1" height="7.4"/>
+      <rect x="66" y="101.4" width="2.1" height="7.4"/>
+      <rect x="75" y="105.6" width="2.1" height="3.2"/>
+      <rect x="80" y="105.6" width="2.1" height="3.2"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+# Gizli degerler — asla repoya girmemeli
+.env
+
+# Yerel test ciktilari (workflow bunlari "git add -f" ile ekler)
+output/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

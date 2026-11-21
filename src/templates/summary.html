@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block style %}
+  .title { margin-top: 48px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 26px; height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .title h1 {
+    margin-top: 14px;
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -2.8px;
+    line-height: 0.98;
+  }
+  .title p {
+    margin-top: 14px;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+
+  /* ---------- uc degerler ---------- */
+  .extremes {
+    margin-top: 30px;
+    display: flex;
+    gap: 14px;
+  }
+  .chip {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--hair-soft);
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .chip .k {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .chip .t { color: var(--accent); font-weight: 800; }
+
+  /* ---------- yerleske listesi ---------- */
+  .cols {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 46px;
+    align-content: start;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--hair-soft);
+  }
+  .row:nth-last-child(-n + 2) { border-bottom: none; }
+
+  .row .ico { flex: 0 0 auto; }
+  .row .ico svg { width: 44px; height: 44px; }
+
+  .row .meta { flex: 1 1 auto; min-width: 0; }
+  .row .nm {
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row .ds {
+    margin-top: 2px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row .ds .wet { color: var(--accent); font-weight: 700; }
+
+  .row .tmp {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+  .row .tmp .mx {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+  .row .tmp .sl { font-size: 16px; color: var(--ink-3); }
+  .row .tmp .mn {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink-3);
+  }
+
+  .hint {
+    margin-top: 30px;
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.2px;
+  }
+  .hint .arrow {
+    display: inline-block;
+    font-weight: 800;
+  }
+{% endblock %}
+
+{% block body %}
+  <div class="title">
+    <div class="eyebrow">Günün özeti</div>
+    <h1>Bugün yerleşkelerde</h1>
+    <p>{{ campuses|length }} yerleşke · en yüksek / en düşük sıcaklık</p>
+  </div>
+
+  {% if warmest and coldest %}
+  <div class="extremes">
+    <div class="chip">
+      <span class="k">En ılık</span>
+      <span>{{ warmest.name }}</span>
+      <span class="t">{{ fmt_temp(warmest.temp_max) }}°</span>
+    </div>
+    <div class="chip">
+      <span class="k">En serin</span>
+      <span>{{ coldest.name }}</span>
+      <span class="t">{{ fmt_temp(coldest.temp_max) }}°</span>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="cols">
+    {% for c in campuses %}
+    <div class="row">
+      <div class="ico">{{ icon_svg(c.icon, 44)|safe }}</div>
+      <div class="meta">
+        <div class="nm">{{ c.name }}</div>
+        <div class="ds">
+          {{ c.description }}{% if c.precip_prob %} · <span class="wet">%{{ fmt_int(c.precip_prob) }}</span> yağış{% endif %}
+        </div>
+      </div>
+      <div class="tmp">
+        <span class="mx">{{ fmt_temp(c.temp_max) }}°</span>
+        <span class="sl">/</span>
+        <span class="mn">{{ fmt_temp(c.temp_min) }}°</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="hint">Yerleşke detayları için kaydır <span class="arrow">→</span></div>
+{% endblock %}

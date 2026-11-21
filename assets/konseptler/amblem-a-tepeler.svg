@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="KOÜ'de Hava — Tepeler">
+  <defs>
+    <linearGradient id="aSky" x1="0.1" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#8FD2FF"/>
+      <stop offset="52%" stop-color="#3E9BEA"/>
+      <stop offset="100%" stop-color="#1361B4"/>
+    </linearGradient>
+    <linearGradient id="aSun" x1="0.1" y1="0" x2="0.85" y2="1">
+      <stop offset="0%" stop-color="#FFE07A"/>
+      <stop offset="100%" stop-color="#FF9E1B"/>
+    </linearGradient>
+    <linearGradient id="aBack" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#129254"/>
+      <stop offset="100%" stop-color="#096336"/>
+    </linearGradient>
+    <linearGradient id="aFront" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#1FC174"/>
+      <stop offset="100%" stop-color="#0E8E50"/>
+    </linearGradient>
+    <clipPath id="aClip"><rect width="120" height="120" rx="30"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#aClip)">
+    <rect width="120" height="120" fill="url(#aSky)"/>
+
+    <!-- gunes -->
+    <circle cx="84" cy="36" r="23" fill="#FFD95E" opacity="0.20"/>
+    <circle cx="84" cy="36" r="14.5" fill="url(#aSun)"/>
+
+    <!-- ruzgar cizgileri -->
+    <g stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="4.6"
+       stroke-linecap="round">
+      <line x1="13" y1="28" x2="40" y2="28"/>
+      <line x1="20" y1="42" x2="52" y2="42"/>
+    </g>
+
+    <!-- arka tepe -->
+    <path d="M2 118 L44 50 L86 118 Z" fill="url(#aBack)"
+          stroke="url(#aBack)" stroke-width="7" stroke-linejoin="round"/>
+    <!-- Kartepe'ye selam: kar ortusu -->
+    <path d="M44 53 L53 68 Q48 63.5 44 66.5 Q40 63.5 35 68 Z" fill="#F4FBFF"/>
+
+    <!-- on tepe -->
+    <path d="M40 118 L78 74 L118 118 Z" fill="url(#aFront)"
+          stroke="url(#aFront)" stroke-width="7" stroke-linejoin="round"/>
+  </g>
+</svg>

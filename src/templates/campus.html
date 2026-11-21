@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block style %}
+  .hero {
+    margin-top: 104px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 26px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .hero-name {
+    margin-top: 16px;
+    font-size: 94px;
+    font-weight: 800;
+    letter-spacing: -3.6px;
+    line-height: 0.98;
+  }
+
+  .hero-sub {
+    margin-top: 14px;
+    font-size: 23px;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+
+  .hero-icon {
+    flex: 0 0 auto;
+    margin-top: -14px;
+    margin-right: -10px;
+  }
+
+  /* ---------- sicaklik ---------- */
+  .temp-block {
+    margin-top: 76px;
+    display: flex;
+    align-items: flex-end;
+    gap: 34px;
+  }
+
+  .temp-now {
+    font-size: 252px;
+    font-weight: 800;
+    letter-spacing: -16px;
+    line-height: 0.80;
+  }
+  .temp-now .deg {
+    font-size: 78px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    vertical-align: top;
+    position: relative;
+    top: 8px;
+    margin-left: 10px;
+    color: var(--ink-2);
+  }
+
+  .minmax {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 16px;
+  }
+  .minmax .mm {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .minmax .k {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    width: 78px;
+  }
+  .minmax .v {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .minmax .mm.low .v { color: var(--ink-2); }
+
+  .condition {
+    margin-top: 46px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -1.4px;
+  }
+  .condition .pulse {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 22%, transparent);
+    flex: 0 0 auto;
+  }
+
+  /* ---------- istatistik seridi ---------- */
+  .stats {
+    margin-top: 102px;
+    padding-top: 42px;
+    border-top: 1px solid var(--hair);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat { padding: 0 24px; }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { padding-right: 0; }
+  .stat + .stat { border-left: 1px solid var(--hair-soft); }
+
+  .stat .k {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    line-height: 1.35;
+    min-height: 38px;
+  }
+  .stat .v {
+    margin-top: 12px;
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -1.8px;
+  }
+  .stat .v small {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--ink-2);
+    margin-left: 4px;
+  }
+
+  /* ---------- gun dogumu / batimi ---------- */
+  .sun {
+    margin-top: 68px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 30px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--hair-soft);
+  }
+  .sun .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .sun .item .lbl { color: var(--ink-2); font-weight: 500; }
+  .sun .sep {
+    flex: 1 1 auto;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent, var(--hair), transparent);
+  }
+  .sun .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.9;
+  }
+  .sun .dot.down { opacity: 0.4; }
+{% endblock %}
+
+{% block body %}
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Yerleşke</div>
+      <div class="hero-name">{{ c.name }}</div>
+      <div class="hero-sub">{{ c.subtitle }}</div>
+    </div>
+    <div class="hero-icon">{{ icon_svg|safe }}</div>
+  </div>
+
+  <div class="temp-block">
+    <div class="temp-now">{{ fmt_temp(c.temp_now) }}<span class="deg">°C</span></div>
+    <div class="minmax">
+      <div class="mm high">
+        <span class="k">Yüksek</span><span class="v">{{ fmt_temp(c.temp_max) }}°</span>
+      </div>
+      <div class="mm low">
+        <span class="k">Düşük</span><span class="v">{{ fmt_temp(c.temp_min) }}°</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="condition">
+    <span class="pulse"></span>{{ c.description }}
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="k">Yağış<br>olasılığı</div>
+      <div class="v">{{ fmt_int(c.precip_prob) }}<small>%</small></div>
+    </div>
+    <div class="stat">
+      <div class="k">Rüzgâr<br>en yüksek</div>
+      <div class="v">{{ fmt_int(c.wind_max) }}<small>km/s</small></div>
+    </div>
+    <div class="stat">
+      <div class="k">Hissedilen<br>sıcaklık</div>
+      <div class="v">{{ fmt_temp(c.feels_like) }}°</div>
+    </div>
+    <div class="stat">
+      <div class="k">Bağıl<br>nem</div>
+      <div class="v">{{ fmt_int(c.humidity) }}<small>%</small></div>
+    </div>
+  </div>
+
+  <div class="sun">
+    <div class="item">
+      <span class="dot"></span>
+      <span class="lbl">Gün doğumu</span>
+      <span>{{ c.sunrise_hm }}</span>
+    </div>
+    <div class="sep"></div>
+    <div class="item">
+      <span class="lbl">Gün batımı</span>
+      <span>{{ c.sunset_hm }}</span>
+      <span class="dot down"></span>
+    </div>
+  </div>
+{% endblock %}
