@@ -195,7 +195,17 @@ def render(campuses: list[CampusWeather], day: dt.date, config: dict,
     written: list[Path] = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=["--font-render-hinting=none"])
+        try:
+            browser = p.chromium.launch(args=["--font-render-hinting=none"])
+        except Exception as exc:
+            # Playwright guncellenince tarayici derlemesi eksik kalabiliyor;
+            # 40 satirlik traceback yerine cozumu soyle.
+            if "Executable doesn't exist" in str(exc):
+                raise RuntimeError(
+                    "Playwright tarayıcısı bulunamadı veya eksik. "
+                    "Şu komutu çalıştır:  python -m playwright install chromium"
+                ) from None
+            raise
         page = browser.new_page(
             viewport={"width": WIDTH, "height": HEIGHT},
             device_scale_factor=1,

@@ -51,6 +51,21 @@ def preflight(image_base: str | None) -> list[str]:
     if io.git_remote_slug() is None:
         problems.append("GitHub uzak deposu bulunamadı")
 
+    # Tarayici hazir mi — gorsel uretimi buna bagli, en basta anlasilsin
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            p.chromium.launch().close()
+    except ImportError:
+        problems.append("Playwright kurulu değil: pip install -r requirements.txt")
+    except Exception as exc:
+        if "Executable doesn't exist" in str(exc):
+            problems.append(
+                "Playwright tarayıcısı eksik: python -m playwright install chromium"
+            )
+        else:
+            problems.append(f"Tarayıcı başlatılamadı: {exc}")
+
     config = io.load_config()
     carousel = [c for c in config.get("campuses", []) if c.get("carousel")]
     slides = len(carousel) + (
