@@ -2,8 +2,14 @@ name: Günlük hava durumu paylaşımı
 
 on:
   schedule:
-    # 03:30 UTC = 06:30 Türkiye saati (TR yıl boyunca UTC+3)
-    - cron: "30 3 * * *"
+    # GitHub'ın cron'u "en iyi çaba" ile çalışır; tam saat ve yarım saat
+    # başlarında yoğunluk yüzünden gecikebilir veya hiç tetiklenmeyebilir.
+    # Bu yüzden tek dakika yerine biri asıl biri yedek iki zaman var.
+    # Aynı güne ikinci gönderi çıkmaz: paylaşım öncesi kontrol ediliyor.
+    # 03:23 UTC = 06:23 Türkiye saati (TR yıl boyunca UTC+3)
+    - cron: "23 3 * * *"
+    # yedek: 04:13 UTC = 07:13 Türkiye saati
+    - cron: "13 4 * * *"
   workflow_dispatch:
     inputs:
       dry_run:

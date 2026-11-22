@@ -58,6 +58,8 @@ def parse_args() -> argparse.Namespace:
                         help="Üretimi atla, diskteki görselleri paylaş")
     parser.add_argument("--caption-only", action="store_true",
                         help="Sadece açıklama metnini üret ve yazdır")
+    parser.add_argument("--force", action="store_true",
+                        help="Bugün zaten paylaşım yapılmışsa bile paylaş")
     parser.add_argument("--date", help="YYYY-MM-DD (varsayılan: bugün)")
     parser.add_argument("--config", default=str(CONFIG_PATH))
     parser.add_argument("--outdir", default=str(OUTPUT_ROOT))
@@ -137,6 +139,15 @@ def main() -> int:
         print(f"      OK {url}")
 
     publisher = ig_mod.InstagramPublisher()
+
+    # Ayni gune ikinci gonderi cikmasin (yedek zamanlama, elle tekrar deneme)
+    if not args.force:
+        existing = publisher.posted_on(day, timezone)
+        if existing:
+            print(f"Bugün zaten paylaşım yapılmış: {existing}")
+            print("Yine de paylaşmak için --force kullan.")
+            return 0
+
     media_id = publisher.publish_carousel(image_urls, text)
     print(f"\nYayınlandı. media_id={media_id}")
     return 0

@@ -206,6 +206,29 @@ class InstagramPublisher:
             fields = "username" if self.is_instagram_login else "username,name"
         return self._get(self.user_id, {"fields": fields})
 
+    def posted_on(self, day, tz: str = "Europe/Istanbul") -> str | None:
+        """Verilen gunde paylasilmis bir gonderi varsa baglantisini dondurur.
+
+        Ayni gun ikinci kez paylasmayi onlemek icin; yedek zamanlama veya
+        elle tekrar deneme yuzunden mukerrer gonderi cikmasin.
+        """
+        import datetime as _dt
+        from zoneinfo import ZoneInfo
+
+        data = self._get(f"{self.user_id}/media",
+                         {"fields": "timestamp,permalink", "limit": "10"})
+        for item in data.get("data", []):
+            stamp = item.get("timestamp")
+            if not stamp:
+                continue
+            try:
+                when = _dt.datetime.strptime(stamp, "%Y-%m-%dT%H:%M:%S%z")
+            except ValueError:
+                continue
+            if when.astimezone(ZoneInfo(tz)).date() == day:
+                return item.get("permalink") or "(bağlantı yok)"
+        return None
+
     def debug_token(self) -> dict:
         """Token'in gecerliligi ve izinleri.
 

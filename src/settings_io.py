@@ -100,22 +100,60 @@ def read_workflow_time() -> str:
     return cron_to_tr_time(match.group(1)) if match else "06:30"
 
 
+# Yedek calistirma, asil saatten bu kadar sonra denenir
+BACKUP_DELAY_MINUTES = 50
+
+
+def backup_time(time_hhmm: str) -> str:
+    """Asil saatten BACKUP_DELAY_MINUTES sonrasi."""
+    hour, _, minute = time_hhmm.partition(":")
+    total = (int(hour) * 60 + int(minute or 0) + BACKUP_DELAY_MINUTES) % (24 * 60)
+    return f"{total // 60:02d}:{total % 60:02d}"
+
+
 def write_workflow_time(time_hhmm: str) -> bool:
-    """Workflow cron'unu gunceller. Degisiklik olduysa True doner."""
+    """Workflow'daki asil ve yedek cron'u gunceller.
+
+    GitHub'in zamanlayicisi gecikebildigi icin iki zaman tutuluyor; ayni
+    gune ikinci gonderi cikmasini paylasim oncesi kontrol engelliyor.
+    """
     if not WORKFLOW_PATH.exists():
         return False
     text = WORKFLOW_PATH.read_text(encoding="utf-8")
-    cron = tr_time_to_cron(time_hhmm)
-    new_text, count = re.subn(r'(- cron:\s*")[^"]+(")',
-                              lambda m: m.group(1) + cron + m.group(2),
-                              text, count=1)
-    if count and new_text != text:
-        # yorum satirindaki saat aciklamasi da guncellensin
-        new_text = re.sub(
-            r"#.*=.*Türkiye saati.*\n",
-            f"# {cron.split()[1]}:{int(cron.split()[0]):02d} UTC = "
-            f"{time_hhmm} Türkiye saati (TR yıl boyunca UTC+3)\n",
-            new_text, count=1)
+
+    backup = backup_time(time_hhmm)
+    crons = [tr_time_to_cron(time_hhmm), tr_time_to_cron(backup)]
+    times = [time_hhmm, backup]
+
+    index = 0
+
+    def swap_cron(match: re.Match) -> str:
+        nonlocal index
+        value = crons[index] if index < len(crons) else match.group(2)
+        index += 1
+        return match.group(1) + value + match.group(3)
+
+    new_text = re.sub(r'(- cron:\s*")([^"]+)(")', swap_cron, text)
+
+    # Yorumlardaki saat aciklamalari da guncellensin
+    comment_index = 0
+
+    def swap_comment(match: re.Match) -> str:
+        nonlocal comment_index
+        if comment_index >= len(crons):
+            return match.group(0)
+        cron = crons[comment_index]
+        label = "# " if comment_index == 0 else "# yedek: "
+        line = (f"{label}{int(cron.split()[1]):02d}:{int(cron.split()[0]):02d} "
+                f"UTC = {times[comment_index]} Türkiye saati")
+        if comment_index == 0:
+            line += " (TR yıl boyunca UTC+3)"
+        comment_index += 1
+        return match.group(1) + line + "\n"
+
+    new_text = re.sub(r"( *)#.*UTC = .*Türkiye saati.*\n", swap_comment, new_text)
+
+    if new_text != text:
         WORKFLOW_PATH.write_text(new_text, encoding="utf-8")
         return True
     return False
