@@ -1,4 +1,4 @@
-🗓 23 Kasım 2026, Pazartesi - 07:22 - KOÜ'de Hava
+🗓 23 Kasım 2026, Pazartesi - 11:22 - KOÜ'de Hava
 
 🔆 En ılık: Derbent 23°C
 ❄️ En serin: Umuttepe 20°C
@@ -7,15 +7,15 @@
 Yerleşke yerleşke detaylar için kaydır 👉
 
 • Umuttepe: 10° / 20° · Gök gürültülü fırtına
-• Körfez: 12° / 23° · Gök gürültülü fırtına
+• Körfez: 12° / 23° · Sağanak yağışlı
 • Anıtpark: 10° / 23° · Gök gürültülü fırtına
-• Arslanbey: 8° / 23° · Yağmurlu
+• Arslanbey: 8° / 22° · Hafif sağanak
 • Hereke Borusan: 12° / 22° · Gök gürültülü fırtına
-• Değirmendere: 12° / 23° · Gök gürültülü fırtına
+• Değirmendere: 12° / 23° · Sağanak yağışlı
 • Karamürsel: 12° / 23° · Gök gürültülü fırtına
 • Derbent: 8° / 23° · Hafif sağanak
-• Gölcük: 11° / 23° · Yağmurlu
-• Kandıra: 9° / 22° · Gök gürültülü fırtına
+• Gölcük: 11° / 22° · Gök gürültülü fırtına
+• Kandıra: 9° / 21° · Gök gürültülü fırtına
 
 Veri: Open-Meteo
 
