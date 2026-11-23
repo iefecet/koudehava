@@ -29,6 +29,10 @@ class InstagramError(RuntimeError):
     pass
 
 
+class AppAccessBlocked(InstagramError):
+    """Meta uygulamanin tum API erisimini engellemis."""
+
+
 class TokenInspectionUnsupported(InstagramError):
     """Bu yolda token inceleme ucnoktasi yok (Instagram Login)."""
 
@@ -110,9 +114,26 @@ class InstagramPublisher:
             ) from None
         if "error" in payload:
             error = payload["error"]
+            code = error.get("code")
+            subcode = error.get("error_subcode")
+            message = error.get("message", "")
+
+            # Uygulama duzeyinde engelleme: en basit okuma bile reddedilir.
+            # Yeni token almak coz-mez, Meta panelinden bakilmasi gerekir.
+            if subcode == 5258005 or "API access blocked" in message:
+                trace = error.get("fbtrace_id", "-")
+                raise AppAccessBlocked("\n".join((
+                    f"Meta bu uygulamanın API erişimini engellemiş "
+                    f"(kod {code}/{subcode}).",
+                    "Yeni token almak çözmez; engel uygulama düzeyinde "
+                    "— en basit okuma bile reddediliyor.",
+                    "Meta App Dashboard → Uyarı Gelen Kutusu ve Required "
+                    "actions bölümlerine bak; sebep orada yazar.",
+                    f"Desteğe başvurursan bu izi ver: {trace}",
+                )))
+
             raise InstagramError(
-                f"Graph API hatasi [{error.get('code')}/"
-                f"{error.get('error_subcode')}]: {error.get('message')}"
+                f"Graph API hatasi [{code}/{subcode}]: {message}"
             )
         if not response.ok:
             raise InstagramError(f"Graph API {response.status_code}: {payload}")
