@@ -1,4 +1,4 @@
-🗓 24 Kasım 2026, Salı - 08:56 - KOÜ'de Hava
+🗓 24 Kasım 2026, Salı - 16:58 - KOÜ'de Hava
 
 🔆 En ılık: Anıtpark 13°C
 ❄️ En serin: Umuttepe 9°C
@@ -8,13 +8,13 @@ Yerleşke yerleşke detaylar için kaydır 👉
 
 • Umuttepe: 2° / 9° · Yağmurlu
 • Körfez: 8° / 12° · Hafif sağanak
-• Anıtpark: 6° / 13° · Yağmurlu
+• Anıtpark: 7° / 13° · Yağmurlu
 • Arslanbey: 4° / 12° · Hafif sağanak
 • Hereke Borusan: 5° / 12° · Hafif yağmurlu
 • Değirmendere: 8° / 12° · Hafif sağanak
-• Karamürsel: 7° / 12° · Hafif sağanak
-• Derbent: 5° / 12° · Yağmurlu
-• Gölcük: 5° / 12° · Yağmurlu
+• Karamürsel: 6° / 12° · Hafif sağanak
+• Derbent: 4° / 12° · Hafif sağanak
+• Gölcük: 4° / 12° · Yağmurlu
 • Kandıra: 4° / 12° · Yağmurlu
 
 Veri: Open-Meteo
