@@ -304,6 +304,43 @@ sayısı Instagram'ın 10 slayt sınırını aşarsa uyarır.
 
 ---
 
+## Zamanlama güvenilirliği
+
+GitHub Actions'ın cron'u **garanti vermez**. Bu depoda zamanlanmış
+çalıştırmaların saatlerce geciktiği gözlendi (06:23 yerine 16:57 gibi).
+Bu yüzden iki katmanlı bir kurulum var:
+
+| Katman | Ne zaman çalışır | Güvenilirlik |
+|---|---|---|
+| Bilgisayardaki görev | Bilgisayar açıkken, saati saatine | Yüksek |
+| GitHub Actions cron | Her gün, gecikmeli olabilir | Yedek |
+
+İkisi aynı gün çalışsa bile **ikinci gönderi çıkmaz**: paylaşımdan önce o gün
+gönderi yapılıp yapılmadığı Instagram'dan kontrol edilir.
+
+Bilgisayardaki görevi kurmak için:
+
+```powershell
+python scripts/zamanlayici.py --kur
+```
+
+```powershell
+python scripts/zamanlayici.py --durum
+```
+
+```powershell
+python scripts/zamanlayici.py --kaldir
+```
+
+Saat, ayarlardaki paylaşım saatinden alınır (`--saat 07:00` ile değiştirilebilir).
+Görev `pythonw.exe` ile çalışır, yani konsol penceresi açılmaz; çıktısı
+`output/_log/gunluk.log` dosyasına yazılır.
+
+> Bilgisayar o saatte kapalıysa görev çalışmaz — GitHub'daki zamanlama tam da
+> bunun için yedekte duruyor.
+
+---
+
 ## Komutlar
 
 | Komut | Ne yapar |
@@ -317,6 +354,7 @@ sayısı Instagram'ın 10 slayt sınırını aşarsa uyarır.
 | `python scripts/check_token.py` | Token süresini gösterir |
 | `python scripts/ayarlar.py` | **Ayar arayüzünü açar** |
 | `python scripts/yayinla.py` | Hemen gönderi yayınlar |
+| `python scripts/zamanlayici.py --kur` | Bilgisayarda günlük görev kurar |
 | `python src/main.py --caption-only` | Sadece açıklama metnini yazdırır |
 | `python scripts/make_logo.py` | Logo PNG'lerini üretir |
 

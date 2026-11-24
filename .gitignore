@@ -4,6 +4,9 @@
 # Yerel test ciktilari (workflow bunlari "git add -f" ile ekler)
 output/
 
+# Zamanlayici sarmalayicisi (makineye ozel yollar icerir)
+scripts/gunluk_paylas.cmd
+
 # Python
 __pycache__/
 *.pyc
