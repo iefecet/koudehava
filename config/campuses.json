@@ -13,7 +13,7 @@
     "include_summary_slide": true
   },
   "post": {
-    "time": "06:30",
+    "time": "06:23",
     "hashtags": "#kocaeliüniversitesi #koü #umuttepe #kocaeli #izmit #havadurumu #kampüs #öğrenci",
     "caption_template": "🗓 {tarih} - {saat} - {marka}\n\n🔆 En ılık: {en_ilik}\n❄️ En serin: {en_serin}\n{yagis_uyarisi}\n{ruzgar_uyarisi}\n\nYerleşke yerleşke detaylar için kaydır 👉\n\n{detaylar}\n\nVeri: Open-Meteo\n\n{hesap}\n\n{hashtagler}",
     "show_chart": true,
