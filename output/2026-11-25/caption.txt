@@ -1,4 +1,4 @@
-🗓 25 Kasım 2026, Çarşamba - 07:15 - KOÜ'de Hava
+🗓 25 Kasım 2026, Çarşamba - 16:13 - KOÜ'de Hava
 
 🔆 En ılık: Karamürsel 10°C
 ❄️ En serin: Umuttepe 7°C
@@ -7,14 +7,14 @@
 Yerleşke yerleşke detaylar için kaydır 👉
 
 • Umuttepe: 0° / 7° · Parçalı bulutlu
-• Körfez: 4° / 10° · Az bulutlu
+• Körfez: 5° / 10° · Az bulutlu
 • Anıtpark: 3° / 10° · Parçalı bulutlu
 • Arslanbey: 0° / 9° · Parçalı bulutlu
-• Hereke Borusan: 3° / 9° · Az bulutlu
-• Değirmendere: 4° / 10° · Az bulutlu
-• Karamürsel: 3° / 10° · Az bulutlu
+• Hereke Borusan: 3° / 10° · Az bulutlu
+• Değirmendere: 5° / 10° · Az bulutlu
+• Karamürsel: 4° / 10° · Az bulutlu
 • Derbent: 1° / 9° · Parçalı bulutlu
-• Gölcük: 1° / 9° · Parçalı bulutlu
+• Gölcük: 1° / 10° · Parçalı bulutlu
 • Kandıra: 1° / 9° · Parçalı bulutlu
 
 Veri: Open-Meteo
